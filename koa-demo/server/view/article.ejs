@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <script src="../js/jquery-1.9.1.min.js"></script>
+    <script src="../js/index.js"></script>
+    <title>文章</title>
+</head>
+<body>
+    <button class="btn" id="J_UploadPictureBtn">上传图片</button>
+    <hr/>
+    <p>上传进度<span id="J_UploadProgress">0</span>%</p>
+    <p>上传结果图片</p>
+    <div id="J_PicturePreview" class="preview-picture">
+    </div>
+   <form>
+        <div>
+            标题：<br>
+            <input type="text" id="title" name="title">
+        </div>
+        <div>
+            内容：<br>
+            <textarea name="content" id="content" cols="30" rows="10"></textarea>
+        </div>
+        <div>
+            <input type="button" value="发布文章" id="saveArticle">
+        </div>
+
+   </form>
+    <script>
+        $(function(){
+            let bannerImg = ''
+            let btn = document.getElementById('J_UploadPictureBtn')
+            let progressElem = document.getElementById('J_UploadProgress')
+            let previewElem = document.getElementById('J_PicturePreview')
+            btn.addEventListener('click', function(){
+                uploadAction({
+                    success: function( result ) {
+                        console.log( result )
+                        if ( result && result.success && result.data && result.data.pictureUrl ) {
+                            previewElem.innerHTML = '<img src="'+ result.data.pictureUrl +'" style="max-width: 100%">'
+                            bannerImg = result.data.pictureUrl
+                        }
+                    },
+                    progress: function( data ) {
+                        if ( data && data * 1 > 0 ) {
+                            progressElem.innerText = data
+                        }
+                    }
+                })
+            })
+
+            var $title = $('#title')
+            var $content = $('#content')
+            $('#saveArticle').on('click',function(){
+                var userInfo = JSON.parse(localStorage.getItem('loginInfo'))
+                if(!userInfo){
+                    alert('请登录')
+                    return false
+                }
+                var userId = userInfo.id
+                console.log(userId)
+                var userName = userInfo.username
+                
+                $.ajax({
+                    url:'/article/addArticleOn',
+                    type:'post',
+                    data:{userId:userId,userName:userName,title:$title.val(),content:$content.val(),bannerImg},
+                    success:function(result){
+                        if(result.success){
+                            alert(result.message)
+                            location.href='/index'
+                        }else{
+                            alert(result.message)
+                        }
+                    }
+                })
+            })
+        })
+    </script>
+</body>
+</html>

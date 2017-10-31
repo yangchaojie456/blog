@@ -1,0 +1,21 @@
+{
+  "name": "koa-demo",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "busboy": "^0.2.14",
+    "ejs": "^2.5.7",
+    "jquery": "^3.2.1",
+    "koa-bodyparser": "^4.2.0",
+    "koa-router": "^7.2.1",
+    "koa-static": "^4.0.1",
+    "koa-views": "^6.0.2",
+    "opn": "^5.1.0"
+  }
+}
